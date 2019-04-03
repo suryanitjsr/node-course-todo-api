@@ -6,6 +6,12 @@ const {User} = require('./../server/models/user.js');
 
 var id = "5ca34a82cd4054678cb89e5d";
 
+// var id = "5ca434a8dcdb790c54858030";
+//
+// if(!ObjectID.isValid(id)){
+//   return console.log('ID not valid');
+// }
+
 User.findById(id).then((user) => {
   if(!user)
   {
@@ -13,12 +19,6 @@ User.findById(id).then((user) => {
   }
   console.log(`\nUser by Id ${id}:\n`,user);
 }).catch((e) => console.log(e));
-
-// var id = "5ca434a8dcdb790c54858030";
-//
-// if(!ObjectID.isValid(id)){
-//   return console.log('ID not valid');
-// }
 
 // Todo.find({
 //   _id: id
