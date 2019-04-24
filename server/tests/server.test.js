@@ -123,7 +123,7 @@ describe('DELETE /todos/:id', () => {
         }
 
         Todo.findById(hexId).then((todo) => {
-          // expect(todo).toNotBeTruthy();
+          expect(todo).toBeFalsy();
           done();
         }).catch((e) => done(e));
       });
@@ -140,6 +140,40 @@ describe('DELETE /todos/:id', () => {
     request(app)
       .delete(`/todos/123`)
       .expect(404)
+      .end(done);
+  });
+});
+
+describe('PATCH /todos/:id', () => {
+  it('should update the todo' ,(done) => {
+    request(app)
+      .patch(`/todos/${todos[0]._id.toHexString()}`)
+      .send({
+        text : 'This is the updated todo text',
+        completed: true
+      })
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.todo.text).toBe('This is the updated todo text');
+        expect(res.body.todo.completed).toBe(true);
+        expect(typeof res.body.todo.completedAt).toBe('number');
+      })
+      .end(done);
+  });
+
+  it('should clear completedAt when todo is not completed', (done) => {
+    request(app)
+      .patch(`/todos/${todos[1]._id.toHexString()}`)
+      .send({
+        text: 'This is the second updated todo item',
+        completed: false
+      })
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.todo.text).toBe('This is the second updated todo item');
+        expect(res.body.todo.completed).toBe(false);
+        expect(res.body.todo.completedAt).toBeFalsy();
+      })
       .end(done);
   });
 });
